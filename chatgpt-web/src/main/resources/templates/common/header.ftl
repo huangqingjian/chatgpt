@@ -8,7 +8,7 @@
                     <span></span>
                 </span>
             </a>
-            <a href="index.html" class="navbar-brand logo">
+            <a href="/" class="navbar-brand logo">
                 <img src="/static/img/logo.png" class="img-fluid" alt="Logo">
             </a>
         </div>
