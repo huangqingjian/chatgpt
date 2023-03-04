@@ -1,0 +1,144 @@
+<div ng-controller="StencilController">
+    <div class="subheader editor-toolbar" id="editor-header">
+        <div class="btn-group">
+            <div class="btn-toolbar pull-left" ng-cloak ng-controller="ToolbarController">
+                <button class="btn btn-inverse"
+                        id="{{item.id}}"
+                        ng-class="{'separator': item.type == 'separator'}"
+                        ng-click="toolbarButtonClicked($index)" ng-disabled="item.type == 'separator' || item.enabled == false"
+                        ng-repeat="item in items" ng-switch
+                        on="item.type"
+                        title="{{item.title | translate}}">
+                    <i class="toolbar-button" data-toggle="tooltip" ng-class="item.cssClass" ng-switch-when="button"
+                       title="{{item.title | translate}}"></i>
+                    <div ng-class="item.cssClass" ng-switch-when="separator"></div>
+                </button>
+            </div>
+        </div>
+        <div class="btn-group pull-right" ng-show="!secondaryItems.length">
+            <div class="btn-toolbar pull-right" ng-controller="ToolbarController">
+                <button class="btn btn-inverse" id="{{item.id}}" ng-class="{'separator': item.type == 'separator'}" ng-click="toolbarSecondaryButtonClicked($index)"
+                        ng-disabled="item.type == 'separator'" ng-repeat="item in secondaryItems"
+                        ng-switch on="item.type"
+                        title="{{item.title | translate}}">
+                    <i class="toolbar-button" data-toggle="tooltip" ng-class="item.cssClass" ng-switch-when="button"
+                       title="{{item.title | translate}}"></i>
+                    <div ng-class="item.cssClass" ng-switch-when="separator"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="full">
+        <div class="row row-no-gutter">
+            <div class="col-xs-3" id="paletteHelpWrapper">
+                <div class="stencils" id="paletteSection">
+                    <div ng-if="stencilItemGroups.length > 1">
+                        <div ng-repeat="group in stencilItemGroups">
+                            <ul class="stencil-group" ng-class="{collapsed: !group.expanded, 'first': $first}"
+                                ng-if="group.visible && group.items">
+                                <li ng-include="'../../editor-app/partials/stencil-item-template.html?version=4'"></li>
+                            </ul>
+                            <div ng-if="!group.items"
+                                 ng-include="'../../editor-app/partials/root-stencil-item-template.html?version=4'"></div>
+                        </div>
+                    </div>
+                    <div ng-if="stencilItemGroups.length == 1">
+                        <ul class="stencil-group">
+                            <li class="stencil-item" data-drag="true"
+                                data-jqyoui-options="{revert: 'invalid', helper: 'clone', opacity : 0.5}"
+                                id="{{item.id}}"
+                                jqyoui-draggable="{onStart:'startDragCallback', onDrag:'dragCallback'}"
+                                ng-model="draggedElement"
+                                ng-repeat="item in stencilItemGroups[0].paletteItems"
+                                title="{{item.description}}">
+
+                                <img height="16px;" ng-src="../../editor-app/stencilsets/bpmn2.0/icons/{{item.icon}}"
+                                     width="16px;"/>
+                                {{item.name}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-9" id="canvasHelpWrapper">
+                <div class="canvas-wrapper" data-drop="true"
+                     data-jqyoui-options
+                     id="canvasSection"
+                     jqyoui-droppable="{onDrop:'dropCallback',onOver: 'overCallback', onOut: 'outCallback'}"
+                     ng-model="droppedElement"
+                     ng-model="droppedElement">
+                    <div class="canvas-message" id="model-modified-date"></div>
+                    <div class="Oryx_button"
+                         id="delete-button"
+                         ng-click="deleteShape()"
+                         style="display:none"
+                         title="{{'BUTTON.ACTION.DELETE.TOOLTIP' | translate}}">
+                        <img src="../../editor-app/images/delete.png"/>
+                    </div>
+                    <div class="Oryx_button"
+                         id="morph-button"
+                         ng-click="morphShape()"
+                         style="display:none"
+                         title="{{'BUTTON.ACTION.MORPH.TOOLTIP' | translate}}">
+                        <img src="../../editor-app/images/wrench.png"/>
+                    </div>
+                    <div class="Oryx_button"
+                         data-drag="true"
+                         data-jqyoui-options="{revert: 'invalid', helper: 'clone', opacity : 0.5}"
+                         id="{{item.id}}"
+                         jqyoui-draggable="{onStart:'startDragCallbackQuickMenu', onDrag:'dragCallbackQuickMenu'}"
+                         ng-click="quickAddItem(item.id)"
+                         ng-model="draggedElement"
+                         ng-repeat="item in quickMenuItems"
+                         style="display:none"
+                         title="{{item.description}}">
+                        <img ng-src="../../editor-app/stencilsets/bpmn2.0/icons/{{item.icon}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-9" id="propertiesHelpWrapper">
+                <div class="propertySection" id="propertySection"
+                     ng-class="{collapsed: propertyWindowState.collapsed}">
+                    <div class="selected-item-section">
+                        <div class="clearfix">
+                            <div class="pull-right" ng-if="selectedItem.auditData.createDate">
+                                <strong>{{'ELEMENT.DATE_CREATED' | translate}}: </strong>
+                                {{selectedItem.auditData.createDate}}
+                            </div>
+                            <div class="pull-right" ng-if="selectedItem.auditData.author">
+                                <strong>{{'ELEMENT.AUTHOR' | translate}}: </strong> {{selectedItem.auditData.author}}
+                            </div>
+                            <div class="selected-item-title">
+                                <a ng-click="propertyWindowState.toggle()">
+                                    <i class="glyphicon"
+                                       ng-class="{'glyphicon-chevron-right': propertyWindowState.collapsed, 'glyphicon-chevron-down': !propertyWindowState.collapsed}"></i>
+                                    <span ng-show="selectedItem.title != undefined && selectedItem.title != null && selectedItem.title.length > 0">{{selectedItem.title}}</span>
+                                    <span ng-show="!selectedItem || selectedItem.title == undefined || selectedItem.title == null || selectedItem.title.length == 0">{{modelData.name}}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="selected-item-body">
+                            <div>
+                                <div class="property-row" ng-class="{'clear' : $index%2 == 0}"
+                                     ng-click="propertyClicked($index)" ng-repeat="property in selectedItem.properties">
+                                    <span class="title" ng-if="!property.hidden">{{ property.title }}&nbsp;:</span>
+                                    <span class="title-removed" ng-if="property.hidden"><i>{{ property.title
+                                        }}&nbsp;({{'PROPERTY.REMOVED' | translate}})&nbsp;:</i></span>
+                                    <span class="value">
+	                                    <ng-include
+                                                ng-if="!property.hasReadWriteMode"
+                                                src="getPropertyTemplateUrl($index)"></ng-include>
+	                                    <ng-include ng-if="property.hasReadWriteMode && property.mode == 'read'"
+                                                    src="getPropertyReadModeTemplateUrl($index)"></ng-include>
+	                                    <ng-include ng-if="property.hasReadWriteMode && property.mode == 'write'"
+                                                    src="getPropertyWriteModeTemplateUrl($index)"></ng-include>
+	                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

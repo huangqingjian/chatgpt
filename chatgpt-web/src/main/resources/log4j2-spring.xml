@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <Properties>
+        <Property name="LOG_HOME">/data/logs</Property>
+        <Property name="PROJECT_NAME">template-web</Property>
+        <Property name="CONSOLE_LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %level %thread %logger{50} %method %L traceId:%X{trace-id} - %msg%n</Property>
+        <Property name="FILE_LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %level %thread %logger{50} %method %L traceId:%X{trace-id} - %msg%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
+        </Console>
+
+        <RollingFile name="FILE" fileName="/data/logs/${PROJECT_NAME}/${PROJECT_NAME}-biz.log"
+                     filePattern="/data/logs/${PROJECT_NAME}/$${date:yyyyMMdd}/${PROJECT_NAME}-biz-%d{yyyy-MM-dd-HH}.%i.log">
+            <PatternLayout>
+                <Pattern>${FILE_LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 每小时生成滚动文件 -->
+                <TimeBasedTriggeringPolicy/>
+                <!-- 单个日志文件大于10M，生成滚动文件 -->
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <!-- max表示filterPattern中i最大滚动值，相同yyyy-MM-dd-HH下超过max的滚动文件不再生成 -->
+            <DefaultRolloverStrategy max="100">
+                <!-- 删除10天前的日志：10 * 24，age值必需和filePattern滚动时间相匹配 -->
+                <Delete basePath="${LOG_HOME}/${PROJECT_NAME}" maxDepth="2">
+                    <IfFileName glob="*/*.log" />
+                    <IfLastModified age="240h" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.finance" level="info" />
+
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+        <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+        <logger name="org.apache.sshd.common.util.SecurityUtils" level="warn"/>
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+        <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
+
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Root>
+    </Loggers>
+</configuration>

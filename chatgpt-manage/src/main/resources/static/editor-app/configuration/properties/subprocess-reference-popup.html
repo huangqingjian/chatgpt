@@ -1,0 +1,52 @@
+<div class="modal" ng-controller="KisBpmCollapsedSubprocessReferencePopupCrtl">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="close()" type="button">&times;
+                </button>
+                <h2>
+                    {{'PROPERTY.SUBPROCESSREFERENCE.TITLE' | translate}}
+                    <span ng-show="selectedSubProcess != null"> - {{selectedSubProcess.name}}</span>
+                    <span ng-show="selectedSubProcess == null"> - {{'PROPERTY.SUBPROCESSREFERENCE.EMPTY' | translate}}</span>
+
+                </h2>
+            </div>
+            <div class="modal-body">
+                <div class="detail-group clearfix">
+                    <div class="col-xs-12">
+                        <div class="alert alert-error"
+                             ng-show="(!state.loadingFolders && !state.loadingSubprocesses) && state.subprocessError"
+                             translate>PROPERTY.SUBPROCESSREFERENCE.ERROR.SUBPROCESS
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-group clearfix">
+                    <div class="col-xs-12 editor-item-picker">
+                        <div class="col-xs-4 editor-item-picker-component"
+                             ng-class="{'selected' : sub.id == selectedSubProcess.id}" ng-click="selectSubProcess(sub, $event)"
+                             ng-if="!state.loadingSubprocesses && !state.subprocessError"
+                             ng-repeat="sub in subProcesses">
+                            <div class="controls">
+                                <input ng-checked="sub.id == selectedSubProcess.id" ng-click="selectSubProcess(sub, $event)" type="checkbox"
+                                       value="option1"/>
+                            </div>
+                            <h4>{{sub.name}}</h4>
+                            <img src="{{config.contextRoot}}/app/rest/models/{{sub.id}}/thumbnail"/>
+                        </div>
+                        <div ng-show="state.loadingSubprocesses">
+                            <p class="loading" translate>PROPERTY.SUBPROCESSREFERENCE.SUBPROCESS.LOADING</p>
+                        </div>
+                        <div ng-show="!state.loadingSubprocesses && subProcesses.length == 0">
+                            <p translate>PROPERTY.SUBPROCESSREFERENCE.SUBPROCESS.EMPTY</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="save()" ng-disabled="state.subprocessError" translate>
+                    ACTION.SAVE
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

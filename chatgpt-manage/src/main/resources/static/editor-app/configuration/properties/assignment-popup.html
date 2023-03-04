@@ -1,0 +1,52 @@
+<div class="modal" ng-controller="KisBpmAssignmentPopupCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="close()" type="button">&times;
+                </button>
+                <h2 translate>PROPERTY.ASSIGNMENT.TITLE</h2>
+            </div>
+            <div class="modal-body">
+
+                <div class="row row-no-gutter">
+                    <div class="form-group">
+                        <label for="assigneeField">{{'PROPERTY.ASSIGNMENT.ASSIGNEE' | translate}}</label>
+                        <input class="form-control" id="assigneeField" ng-model="assignment.assignee" placeholder="{{'PROPERTY.ASSIGNMENT.ASSIGNEE_PLACEHOLDER' | translate}}"
+                               type="text"/>
+                    </div>
+                </div>
+
+                <div class="row row-no-gutter">
+                    <div class="form-group">
+                        <label for="userField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_USERS' | translate}}</label>
+                        <div ng-repeat="candidateUser in assignment.candidateUsers">
+                            <input class="form-control" id="userField" ng-model="candidateUser.value" type="text"/>
+                            <i class="glyphicon glyphicon-minus clickable-property"
+                               ng-click="removeCandidateUserValue($index)"></i>
+                            <i class="glyphicon glyphicon-plus clickable-property"
+                               ng-click="addCandidateUserValue($index)"
+                               ng-if="$index == (assignment.candidateUsers.length - 1)"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="groupField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_GROUPS' | translate}}</label>
+                        <div ng-repeat="candidateGroup in assignment.candidateGroups">
+                            <input class="form-control" id="groupField" ng-model="candidateGroup.value" type="text"/>
+                            <i class="glyphicon glyphicon-minus clickable-property"
+                               ng-click="removeCandidateGroupValue($index)"></i>
+                            <i class="glyphicon glyphicon-plus clickable-property"
+                               ng-click="addCandidateGroupValue($index)"
+                               ng-if="$index == (assignment.candidateGroups.length - 1)"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="close()" translate>ACTION.CANCEL</button>
+                <button class="btn btn-primary" ng-click="save()" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

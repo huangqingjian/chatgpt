@@ -1,0 +1,73 @@
+<div class="modal" ng-controller="KisBpmInParametersPopupCtrl">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="close()" type="button">&times;
+                </button>
+                <h2>{{'PROPERTY.PROPERTY.EDIT.TITLE' | translate:property}}</h2>
+            </div>
+            <div class="modal-body">
+
+                <div class="row row-no-gutter">
+                    <div class="col-xs-6">
+                        <div class="kis-listener-grid" ng-grid="gridOptions" ng-if="translationsRetrieved"></div>
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <a class="btn btn-icon btn-lg" data-original-title=""
+                                   data-placement="bottom" data-title="{{'ACTION.MOVE.UP' | translate}}"
+                                   ng-click="moveParameterUp()" rel="tooltip" title=""><i
+                                        class="glyphicon glyphicon-arrow-up"></i></a>
+                                <a class="btn btn-icon btn-lg" data-original-title=""
+                                   data-placement="bottom" data-title="{{'ACTION.MOVE.DOWN' | translate}}"
+                                   ng-click="moveParameterDown()" rel="tooltip" title=""><i
+                                        class="glyphicon glyphicon-arrow-down"></i></a>
+                            </div>
+                            <div class="btn-group">
+                                <a class="btn btn-icon btn-lg" data-original-title=""
+                                   data-placement="bottom" data-title="{{'ACTION.ADD' | translate:property}}"
+                                   ng-click="addNewParameter()" rel="tooltip" title=""><i
+                                        class="glyphicon glyphicon-plus"></i></a>
+                                <a class="btn btn-icon btn-lg" data-original-title=""
+                                   data-placement="bottom" data-title="{{'ACTION.REMOVE' | translate:property}}"
+                                   ng-click="removeParameter()" rel="tooltip" title=""><i
+                                        class="glyphicon glyphicon-minus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div ng-show="selectedParameters.length > 0">
+
+                            <div class="form-group">
+                                <label for="sourceField">{{'PROPERTY.PARAMETER.SOURCE' | translate}}</label>
+                                <input class="form-control" id="sourceField" ng-model="selectedParameters[0].source"
+                                       placeholder="{{'PROPERTY.PARAMETER.SOURCE.PLACEHOLDER' | translate}}"
+                                       type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="expressionField">{{'PROPERTY.PARAMETER.SOURCEEXPRESSION' | translate}}</label>
+                                <input class="form-control" id="expressionField" ng-model="selectedParameters[0].sourceExpression"
+                                       placeholder="{{'PROPERTY.PARAMETER.SOURCEEXPRESSION.PLACEHOLDER' | translate}}"
+                                       type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="expressionField">{{'PROPERTY.PARAMETER.TARGET' | translate}}</label>
+                                <input class="form-control" id="expressionField" ng-model="selectedParameters[0].target"
+                                       placeholder="{{'PROPERTY.PARAMETER.TARGET.PLACEHOLDER' | translate}}"
+                                       type="text"/>
+                            </div>
+
+                        </div>
+                        <div class="muted no-property-selected" ng-show="selectedParameters.length == 0" translate>
+                            PROPERTY.PARAMETER.EMPTY
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="cancel()" translate>ACTION.CANCEL</button>
+                <button class="btn btn-primary" ng-click="save()" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

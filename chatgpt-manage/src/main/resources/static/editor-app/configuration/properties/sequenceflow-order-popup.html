@@ -1,0 +1,47 @@
+<div class="modal" ng-controller="KisBpmSequenceFlowOrderPopupCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="close()" type="button">&times;
+                </button>
+                <h3>{{'PROPERTY.PROPERTY.EDIT.TITLE' | translate:property}}</h3>
+            </div>
+
+            <div class="modal-body">
+
+                <div translate>PROPERTY.SEQUENCEFLOW.ORDER.DESCRIPTION</div>
+                <br/>
+                <ol>
+                    <li class="sequence-flow-order-element" ng-repeat="sequenceFlow in outgoingSequenceFlow">
+                        {{'PROPERTY.SEQUENCEFLOW.ORDER.SEQUENCEFLOW.VALUE' | translate:sequenceFlow}}
+                        <a class="btn btn-icon btn-sm"
+                           data-original-title=""
+                           data-placement="bottom"
+                           data-title="{{'ACTION.MOVE.UP' | translate}}"
+                           ng-click="moveUp($index)" ng-if="$index > 0"
+                           rel="tooltip"
+                           title="">
+                            <i class="glyphicon glyphicon-arrow-up"></i>
+                        </a>
+                        <a class="btn btn-icon btn-sm"
+                           data-original-title=""
+                           data-placement="bottom"
+                           data-title="{{'ACTION.MOVE.DOWN' | translate}}"
+                           ng-click="moveDown($index)"
+                           ng-if="$index < outgoingSequenceFlow.length - 1"
+                           rel="tooltip"
+                           title="">
+                            <i class="glyphicon glyphicon-arrow-down"></i>
+                        </a>
+                    </li>
+                </ol>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="cancel()" translate>ACTION.CANCEL</button>
+                <button class="btn btn-primary" ng-click="save()" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

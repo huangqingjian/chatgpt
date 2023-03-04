@@ -1,0 +1,5 @@
+<div ng-controller="ActivitiMessageRefCtrl">
+    <select ng-change="messageChanged()" ng-model="property.value"
+            ng-options="messageDefinition.id as (messageDefinition.name + ' (' + messageDefinition.id + ')') for messageDefinition in messageDefinitions">
+    </select>
+</div>

@@ -1,0 +1,65 @@
+<div class="modal" ng-controller="ActivitiSignalDefinitionsPopupCtrl">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="close()" type="button">&times;
+                </button>
+                <h2>{{'PROPERTY.PROPERTY.EDIT.TITLE' | translate:property}}</h2>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row row-no-gutter">
+
+                    <div class="col-xs-8">
+                        <div class="kis-listener-grid" ng-grid="gridOptions" ng-if="translationsRetrieved"></div>
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <a class="btn btn-icon btn-lg" data-original-title="" data-placement="bottom"
+                                   data-title="{{ACTION.ADD | translate}}" ng-click="addNewSignalDefinition()" rel="tooltip"
+                                   title=""><i class="glyphicon glyphicon-plus"></i></a>
+                                <a class="btn btn-icon btn-lg" data-original-title="" data-placement="bottom"
+                                   data-title="{{ACTION.REMOVE | translate}}" ng-click="removeSignalDefinition()" rel="tooltip"
+                                   title=""><i class="glyphicon glyphicon-minus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4" ng-show="selectedSignals && selectedSignals.length > 0">
+
+                        <div class="form-group">
+                            <label>{{'PROPERTY.SIGNALDEFINITIONS.ID' | translate}}</label>
+                            <input class="form-control" ng-model="selectedSignals[0].id" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{'PROPERTY.SIGNALDEFINITIONS.NAME' | translate}}</label>
+                            <input class="form-control" ng-model="selectedSignals[0].name" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{'PROPERTY.SIGNALDEFINITIONS.SCOPE' | translate}}</label>
+                            <select class="form-control" ng-model="selectedSignals[0].scope">
+                                <option value="global">{{'PROPERTY.SIGNALDEFINITIONS.SCOPE-GLOBAL' | translate}}
+                                </option>
+                                <option value="processInstance">
+                                    {{'PROPERTY.SIGNALDEFINITIONS.SCOPE-PROCESSINSTANCE' | translate}}
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="cancel()" translate>ACTION.CANCEL</button>
+                <button class="btn btn-primary" ng-click="save()" translate>ACTION.SAVE</button>
+            </div>
+
+        </div>
+    </div>
+</div>
