@@ -1,6 +1,7 @@
 package com.chatgpt.service;
 
 import com.chatgpt.dto.PageDTO;
+import com.chatgpt.dto.PasswordDTO;
 import com.chatgpt.dto.UserDTO;
 import com.chatgpt.dto.UserQueryDTO;
 
@@ -46,15 +47,6 @@ public interface UserService {
     UserDTO findByMobile(String mobile);
 
     /**
-     * 查找
-     *
-     * @param mobile
-     * @param type
-     * @return
-     */
-    UserDTO findByMobileAndType(String mobile, Integer type);
-
-    /**
      * 新增
      *
      * @param dto
@@ -70,13 +62,13 @@ public interface UserService {
      */
     Long update(UserDTO dto);
 
-//    /**
-//     * 更新密码
-//     *
-//     * @param dto
-//     * @return
-//     */
-//    Long updatePassword(UserPasswordDTO dto);
+    /**
+     * 更新密码
+     *
+     * @param dto
+     * @return
+     */
+    void updatePassword(PasswordDTO dto);
 //
 //    /**
 //     * 注册

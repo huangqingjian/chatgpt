@@ -19,6 +19,6 @@ public class SecureAuthenticationFailureHandler implements AuthenticationFailure
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        ServletUtil.write(httpServletResponse, JSON.toJSONString(ResponseDTO.fail(HttpStatus.UNAUTHORIZED.value(), "手机号或密码错误~")));
+        ServletUtil.write(httpServletResponse, JSON.toJSONString(ResponseDTO.fail(HttpStatus.UNAUTHORIZED.value(), e.getMessage())));
     }
 }

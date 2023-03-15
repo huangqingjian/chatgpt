@@ -131,7 +131,6 @@ public class UserController {
     @PostMapping(value = "save")
     @ResponseBody
     public ResponseDTO<Long> save(@RequestBody UserDTO dto) {
-        dto.setType(UserType.MANAGER.getValue());
         Long id = userService.save(dto);
         return ResponseDTO.success(id);
     }

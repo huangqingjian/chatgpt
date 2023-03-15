@@ -1,6 +1,5 @@
 package com.chatgpt.configuration.secure;
 
-import com.chatgpt.enums.Sex;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,18 +41,6 @@ public class UserDetailsDTO implements UserDetails {
     private String face;
 
     /**
-     * 性别
-     */
-    @ApiModelProperty("性别")
-    private Integer sex;
-
-    /**
-     * 性别
-     */
-    @ApiModelProperty("性别")
-    private String sexStr;
-
-    /**
      * 手机
      */
     @ApiModelProperty("手机")
@@ -64,18 +51,6 @@ public class UserDetailsDTO implements UserDetails {
      */
     @ApiModelProperty("邮箱")
     private String email;
-
-    /**
-     * 描述
-     */
-    @ApiModelProperty("描述")
-    private String desc;
-
-    /**
-     * 用户类型
-     */
-    @ApiModelProperty("用户类型")
-    private Integer type;
 
     public Long getId() {
         return id;
@@ -110,22 +85,6 @@ public class UserDetailsDTO implements UserDetails {
         this.face = face;
     }
 
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public String getSexStr() {
-        return Sex.getSexDesc(sex);
-    }
-
-    public void setSexStr(String sexStr) {
-        this.sexStr = sexStr;
-    }
-
     public String getMobile() {
         return mobile;
     }
@@ -140,22 +99,6 @@ public class UserDetailsDTO implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     @Override

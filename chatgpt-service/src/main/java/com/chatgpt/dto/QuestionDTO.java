@@ -24,6 +24,13 @@ public class QuestionDTO {
     private String id;
 
     /**
+     * 聊天室Id
+     */
+    @ApiModelProperty("聊天室Id")
+    @NotNull(message = "聊天室Id不能为空")
+    private Long chatId;
+
+    /**
      * 问题内容
      */
     @ApiModelProperty("问题内容")
@@ -35,7 +42,7 @@ public class QuestionDTO {
      * 是否连贯上下文
      */
     @ApiModelProperty("是否连贯上下文")
-    private Boolean coherented = false;
+    private Boolean coherented = true;
 
     public String getId() {
         return id;
@@ -43,6 +50,14 @@ public class QuestionDTO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     public List<ContentDTO> getContents() {

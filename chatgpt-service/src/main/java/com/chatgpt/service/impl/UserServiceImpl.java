@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.chatgpt.bean.UserQueryBean;
 import com.chatgpt.domain.User;
 import com.chatgpt.dto.PageDTO;
+import com.chatgpt.dto.PasswordDTO;
 import com.chatgpt.dto.UserDTO;
 import com.chatgpt.dto.UserQueryDTO;
 import com.chatgpt.mapper.UserMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -102,24 +104,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 查找
-     *
-     * @param mobile
-     * @param type
-     * @return
-     */
-    @Override
-    public UserDTO findByMobileAndType(String mobile, Integer type) {
-        log.info("the {}.findByMobileAndType parameter: [{} {}]", this.getClass().getSimpleName(), mobile, type);
-        User domain = userMapper.selectByMobileAndType(mobile, type);
-        if(domain != null) {
-            UserDTO dto = BeanUtils.map(domain, UserDTO.class);
-            return dto;
-        }
-        return null;
-    }
-
-    /**
      * 新增
      *
      * @param dto
@@ -146,9 +130,26 @@ public class UserServiceImpl implements UserService {
         log.info("the {}.update parameter: [{}]", this.getClass().getSimpleName(), JSON.toJSONString(dto));
         User domain = userMapper.selectByPrimaryKey(dto.getId());
         Optional.ofNullable(domain).orElseThrow(() -> new ServiceException("数据非法～"));
+        User mobileUser = userMapper.selectByMobile(dto.getMobile());
+        if(mobileUser != null && !Objects.equals(mobileUser.getId(), domain.getId())) {
+            throw new ServiceException(String.format("手机号【%s】已被占用～", dto.getMobile()));
+        }
         BeanUtils.copy(dto, domain, true);
         userMapper.updateUser(domain);
         return dto.getId();
+    }
+
+    /**
+     * 更新密码
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    @Transactional
+    public void updatePassword(PasswordDTO dto) {
+        log.info("the {}.updatePassword parameter: [{}]", this.getClass().getSimpleName(), JSON.toJSONString(dto));
+
     }
 
 //    /**

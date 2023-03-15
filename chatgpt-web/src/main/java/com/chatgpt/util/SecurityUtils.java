@@ -35,6 +35,6 @@ public class SecurityUtils {
      */
     public static Long getCurrentUserId() {
         UserDetailsDTO userDetails = getCurrentUser();
-        return userDetails == null ? null : userDetails.getId();
+        return userDetails == null ? 0L : userDetails.getId();
     }
 }

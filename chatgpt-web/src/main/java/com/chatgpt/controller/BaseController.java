@@ -26,17 +26,6 @@ public class BaseController {
     private HttpServletRequest request;
 
     /**
-     * 添加RequestURI
-     *
-     * @param model
-     */
-    @ModelAttribute
-    private void before(Model model) {
-        model.addAttribute("requestURL", request.getRequestURI());
-        model.addAttribute("currentUser", getCurrentUser());
-    }
-
-    /**
      * 获取当前用户
      *
      * @return

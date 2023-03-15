@@ -1,25 +1,25 @@
 package com.chatgpt.mapper;
 
-import com.chatgpt.bean.UserQueryBean;
-import com.chatgpt.domain.User;
+import com.chatgpt.bean.CommonQueryBean;
+import com.chatgpt.domain.Chat;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * 员工 mapper
+ * 聊天 mapper
  *
  * author: huangqj
  * date: 2022-11-10 10:43:48
  */
-public interface UserMapper {
+public interface ChatMapper {
     /**
      * 查询列表
      *
      * @param queryBean
      * @return
      */
-    List<User> selectByQuery(UserQueryBean queryBean);
+    List<Chat> selectByQuery(CommonQueryBean queryBean);
 
     /**
      * 通过主键查询
@@ -27,37 +27,29 @@ public interface UserMapper {
      * @param id
      * @return
      */
-    User selectByPrimaryKey(@Param("id") Long id);
+    Chat selectByPrimaryKey(@Param("id") Long id);
 
     /**
-     * 通过主键批量查询
+     * 通过用户Id查询
      *
-     * @param ids
+     * @param userId
      * @return
      */
-    List<User> selectByPrimaryKeys(@Param("ids") List<Long> ids);
-
-    /**
-     * 通过手机查询
-     *
-     * @param mobile
-     * @return
-     */
-    User selectByMobile(@Param("mobile") String mobile);
+    List<Chat> selectByUserId(@Param("userId") Long userId);
 
     /**
      * 新增
      *
      * @param domain
      */
-    void insertUser(User domain);
+    void insertChat(Chat domain);
 
     /**
      * 更新
      *
      * @param domain
      */
-    void updateUser(User domain);
+    void updateChat(Chat domain);
 
     /**
      * 通过主键删除

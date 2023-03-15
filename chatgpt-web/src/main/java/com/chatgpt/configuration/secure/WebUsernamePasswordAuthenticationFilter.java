@@ -1,5 +1,6 @@
 package com.chatgpt.configuration.secure;
 
+import com.chatgpt.constant.Constant;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +38,7 @@ public class WebUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
         if (password == null) {
             password = "";
         }
+        username = username + Constant.MAOHAO + password;
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authRequest);
     }

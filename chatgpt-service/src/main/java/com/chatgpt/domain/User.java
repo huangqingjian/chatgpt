@@ -23,11 +23,6 @@ public class User extends BaseDomain {
     private String mobile;
 
     /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
      * 密码
      */
     private String password;
@@ -36,21 +31,6 @@ public class User extends BaseDomain {
      * 头像
      */
     private String face;
-
-    /**
-     * 性别
-     */
-    private Integer sex;
-
-    /**
-     * 描述
-     */
-    private String desc;
-
-    /**
-     * 用户类型
-     */
-    private Integer type;
 
     public Long getId() {
         return id;
@@ -76,14 +56,6 @@ public class User extends BaseDomain {
         this.mobile = mobile;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -100,27 +72,4 @@ public class User extends BaseDomain {
         this.face = face;
     }
 
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
 }
