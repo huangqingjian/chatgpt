@@ -60,6 +60,13 @@ public interface UserMapper {
     void updateUser(User domain);
 
     /**
+     * 扣减可用次数
+     *
+     * @param userId
+     */
+    void reduceAvailableTimes(@Param("userId") Long userId);
+
+    /**
      * 通过主键删除
      *
      * @param id

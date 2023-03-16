@@ -2,6 +2,7 @@ package com.chatgpt.configuration.exception;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chatgpt.dto.ResponseDTO;
+import com.chatgpt.exception.AvailableException;
 import com.chatgpt.exception.ServiceException;
 import com.chatgpt.util.ServletUtil;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class ExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
 
     /**
-     * 处理异常返回
+     * 服务异常
      *
      * @param e
      * @param request
@@ -37,6 +38,22 @@ public class ExceptionHandler {
     public ResponseDTO serviceExceptionHandler(ServiceException e, HttpServletRequest request) {
         if(ServletUtil.isAjax(request)) {
             return ResponseDTO.fail(e.getMessage());
+        }
+        throw e;
+    }
+
+    /**
+     * 可用异常
+     *
+     * @param e
+     * @param request
+     * @return
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = AvailableException.class)
+    @ResponseBody
+    public ResponseDTO availableExceptionHandler(AvailableException e, HttpServletRequest request) {
+        if(ServletUtil.isAjax(request)) {
+            return ResponseDTO.fail(HttpStatus.FORBIDDEN.value(), e.getMessage());
         }
         throw e;
     }

@@ -1,7 +1,7 @@
 package com.chatgpt.exception;
 
 /**
- * 自定义异常
+ * 自定义服务异常
  */
 public class ServiceException extends RuntimeException{
     public ServiceException() {

@@ -64,5 +64,5 @@ public interface ChatService {
      * @param question
      * @return
      */
-    AnswerDTO chat(QuestionDTO question);
+    AnswerDTO chat(QuestionDTO question) throws Exception;
 }

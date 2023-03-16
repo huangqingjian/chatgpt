@@ -45,12 +45,16 @@ public class UserDetailsDTO implements UserDetails {
      */
     @ApiModelProperty("手机")
     private String mobile;
-
     /**
      * 邮箱
      */
     @ApiModelProperty("邮箱")
     private String email;
+    /**
+     * 描述
+     */
+    @ApiModelProperty("描述")
+    private String desc;
 
     public Long getId() {
         return id;
@@ -99,6 +103,14 @@ public class UserDetailsDTO implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     @Override

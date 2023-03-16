@@ -4,8 +4,8 @@ package com.chatgpt.enums;
  * 用户类型
  */
 public enum UserType {
-    MANAGER(1 ,"管理员"),
-    CUSTOMER(2 ,"客户"),
+    NORMAL(0,"普通用户"),
+    VIP(1 ,"VIP"),
     ;
 
     private int value;

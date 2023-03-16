@@ -7,6 +7,8 @@
         <result column="answer" property="answer" jdbcType="VARCHAR" />
         <result column="user_id" property="userId" jdbcType="BIGINT" />
         <result column="chat_id" property="chatId" jdbcType="BIGINT" />
+        <result column="question_time" property="questionTime" jdbcType="TIMESTAMP" />
+        <result column="answer_time" property="answerTime" jdbcType="TIMESTAMP" />
         <result column="create_by" property="createBy" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_by" property="updateBy" jdbcType="BIGINT" />
@@ -19,6 +21,8 @@
         `answer`,
         `user_id`,
         `chat_id`,
+        `question_time`,
+        `answer_time`,
         `create_by`,
         `create_time`,
         `update_by`,
@@ -77,6 +81,12 @@
             <if test="chatId != null" >
                 `chat_id`,
             </if>
+            <if test="questionTime != null" >
+                `question_time`,
+            </if>
+            <if test="answerTime != null" >
+                `answer_time`,
+            </if>
             <if test="createBy != null" >
                 `create_by`,
             </if>
@@ -96,6 +106,12 @@
             </if>
             <if test="chatId != null" >
                 #{chatId,jdbcType=BIGINT},
+            </if>
+            <if test="questionTime != null" >
+                #{questionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="answerTime != null" >
+                #{answerTime,jdbcType=TIMESTAMP},
             </if>
             <if test="createBy != null" >
                 #{createBy,jdbcType=BIGINT},
@@ -119,6 +135,12 @@
             </if>
             <if test="chatId != null" >
                 `chat_id` = #{chatId,jdbcType=BIGINT},
+            </if>
+            <if test="questionTime != null" >
+                `question_time` = #{questionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="answerTime != null" >
+                `answer_time` = #{answerTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateBy != null" >
                 `update_by` = #{updateBy,jdbcType=BIGINT},

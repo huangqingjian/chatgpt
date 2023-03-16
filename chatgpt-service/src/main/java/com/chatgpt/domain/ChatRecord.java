@@ -1,5 +1,7 @@
 package com.chatgpt.domain;
 
+import java.util.Date;
+
 /**
  * 聊天记录
  *
@@ -31,6 +33,16 @@ public class ChatRecord extends BaseDomain {
      * 用户Id
      */
     private Long userId;
+
+    /**
+     * 提问时间
+     */
+    private Date questionTime;
+
+    /**
+     * 回答时间
+     */
+    private Date answerTime;
 
     public Long getId() {
         return id;
@@ -70,5 +82,21 @@ public class ChatRecord extends BaseDomain {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Date getQuestionTime() {
+        return questionTime;
+    }
+
+    public void setQuestionTime(Date questionTime) {
+        this.questionTime = questionTime;
+    }
+
+    public Date getAnswerTime() {
+        return answerTime;
+    }
+
+    public void setAnswerTime(Date answerTime) {
+        this.answerTime = answerTime;
     }
 }

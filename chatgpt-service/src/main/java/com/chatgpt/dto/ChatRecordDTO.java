@@ -44,10 +44,16 @@ public class ChatRecordDTO extends BaseDTO {
     private Long userId;
 
     /**
-     * 聊天时间
+     * 提问时间
      */
-    @ApiModelProperty("聊天时间")
-    private Date chatTime;
+    @ApiModelProperty("提问时间")
+    private Date questionTime;
+
+    /**
+     * 回答时间
+     */
+    @ApiModelProperty("回答时间")
+    private Date answerTime;
 
     public Long getId() {
         return id;
@@ -89,12 +95,19 @@ public class ChatRecordDTO extends BaseDTO {
         this.userId = userId;
     }
 
-    public Date getChatTime() {
-        this.chatTime = getCreateTime();
-        return chatTime;
+    public Date getQuestionTime() {
+        return questionTime;
     }
 
-    public void setChatTime(Date chatTime) {
-        this.chatTime = chatTime;
+    public void setQuestionTime(Date questionTime) {
+        this.questionTime = questionTime;
+    }
+
+    public Date getAnswerTime() {
+        return answerTime;
+    }
+
+    public void setAnswerTime(Date answerTime) {
+        this.answerTime = answerTime;
     }
 }

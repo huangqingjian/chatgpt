@@ -6,8 +6,11 @@ import com.chatgpt.constant.Constant;
 import com.chatgpt.dto.PasswordDTO;
 import com.chatgpt.dto.ResponseDTO;
 import com.chatgpt.dto.UserDTO;
+import com.chatgpt.dto.UserRightDTO;
 import com.chatgpt.exception.ServiceException;
+import com.chatgpt.service.UserRightService;
 import com.chatgpt.service.UserService;
+import com.chatgpt.util.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.security.sasl.AuthenticationException;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -48,6 +52,8 @@ public class UserController extends BaseController{
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRightService userRightService;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -121,6 +127,32 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/dashboard.html")
     public String dashboard() {
         return DASHBOARD;
+    }
+
+    /**
+     * 获取当前用户(实时数据)
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取当前用户(实时数据)")
+    @GetMapping(value = "/get")
+    @ResponseBody
+    public ResponseDTO<UserDetailsDTO> get() {
+        UserDetailsDTO user = getCurrentUser();
+        UserRightDTO userRight = userRightService.findByUserId(getCurrentUserId());
+        if(userRight != null) {
+            user.setDesc("普通用户");
+            if(userRight.getEndAvailableTime() != null && userRight.getEndAvailableTime().after(new Date())) {
+                user.setDesc(String.format("会员截止日期：%s", DateUtils.format(userRight.getEndAvailableTime())));
+            } else {
+                if(userRight.getAvailableTimes() > Constant.ZERO) {
+                    user.setDesc(String.format("可用%s次聊天次数", userRight.getAvailableTimes()));
+                } else {
+                    user.setDesc("没有可用聊天次数");
+                }
+            }
+        }
+        return ResponseDTO.success(user);
     }
 
 

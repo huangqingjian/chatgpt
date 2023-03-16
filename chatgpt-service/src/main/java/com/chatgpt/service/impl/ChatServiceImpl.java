@@ -6,14 +6,19 @@ import com.chatgpt.constant.Constant;
 import com.chatgpt.context.UserContext;
 import com.chatgpt.domain.Chat;
 import com.chatgpt.dto.*;
+import com.chatgpt.enums.AvailableUserRight;
 import com.chatgpt.enums.ContentType;
+import com.chatgpt.exception.AvailableException;
 import com.chatgpt.exception.ServiceException;
 import com.chatgpt.listener.event.ChatEvent;
 import com.chatgpt.mapper.ChatMapper;
 import com.chatgpt.property.ChatGptProperty;
 import com.chatgpt.service.ChatRecordService;
 import com.chatgpt.service.ChatService;
+import com.chatgpt.service.UserRightService;
+import com.chatgpt.service.UserService;
 import com.chatgpt.util.BeanUtils;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.theokanning.openai.OpenAiService;
@@ -22,16 +27,14 @@ import com.theokanning.openai.completion.CompletionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +53,15 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private ChatRecordService chatRecordService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private UserRightService userRightService;
+
+    @Autowired
+    @Qualifier(value = "chatCache")
+    private LoadingCache<Long, ChatDTO> chatCache;
 
     /**
      * 查询
@@ -167,15 +178,27 @@ public class ChatServiceImpl implements ChatService {
      * @param question
      * @return
      */
-    public AnswerDTO chat(QuestionDTO question) {
+    public AnswerDTO chat(QuestionDTO question) throws Exception {
         log.info("the {}.chat parameter: [{}]", this.getClass().getSimpleName(), question);
-        // todo 权限校验
-
-
+        // 权限校验
+        ChatDTO chat = chatCache.get(question.getChatId());
+        Optional.ofNullable("会话不存在～");
+        Long userId = UserContext.getUser();
+        if(!Objects.equals(chat.getUserId(), userId)) {
+            throw new ServiceException("您无权操作～");
+        }
         List<ContentDTO> contents = question.getContents();
         if(CollectionUtils.isEmpty(contents)) {
             throw new ServiceException("请输入您的问题～");
         }
+        // 获取用户可用权益
+        AvailableUserRight availableUserRight = getAvailableUserRight(userId);
+        // 聊天事件
+        ChatEvent chatEvent = new ChatEvent(this)
+            .chatId(question.getChatId())
+            .question(contents.get(contents.size() - 1).getContent())
+            .questionTime(new Date())
+            .availableUserRight(availableUserRight);
         // 组装内容
         StringBuffer sb = new StringBuffer();
         if(Objects.equals(Boolean.TRUE, question.getCoherented())) {
@@ -196,27 +219,76 @@ public class ChatServiceImpl implements ChatService {
             sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
         }
         // 请求chatgpt
-        /**
-        OpenAiService service = new OpenAiService(chatGptProperty.getToken(), Duration.ofSeconds(chatGptProperty.getRequestTimeout()));
-        CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt(sb.toString())
-                .model(chatGptProperty.getModel())
-                .temperature(chatGptProperty.getTemperature())
-                .maxTokens(chatGptProperty.getMaxTokens())
-                .build();
-        // 响应结果处理
-        List<CompletionChoice> completionChoices = service.createCompletion(completionRequest).getChoices();
-        if(CollectionUtils.isEmpty(completionChoices)) {
-            log.error("ChatGpt Answer:{}", JSON.toJSONString(completionChoices));
-            throw new ServiceException("ChatGpt发生了意外～");
+        ChatGptDTO response = new ChatGptDTO(); // sendChatGpt(sb.toString());
+        response.setAnswer("OK, my name is Limingqiang. I like singing, playing basketballand so on.");
+        if(response.getSuccessed()) {
+            chatEvent.answer(response.getAnswer()).answerTime(new Date());
         }
-        String answer = completionChoices.get(completionChoices.size() - 1).getText().replace(chatGptProperty.getAnswer().concat(Constant.MAOHAO), Constant.EMPTY);
-        */
-        String answer = "OK, my name is Limingqiang. I like singing, playing basketballand so on.";
         // 发布聊天事件
-        applicationEventPublisher.publishEvent(new ChatEvent(this, question.getChatId(), contents.get(contents.size() - 1).getContent(), answer));
-        return new AnswerDTO().chatId(question.getChatId()).content(answer);
+        applicationEventPublisher.publishEvent(chatEvent);
+        if(!response.getSuccessed()) {
+            throw new ServiceException("聊天机器人出问题啦～");
+        }
+        return new AnswerDTO().chatId(question.getChatId()).content(response.getAnswer());
     }
+
+    /**
+     * 发送给chatgpt
+     *
+     * @param prompt
+     * @return
+     */
+    private ChatGptDTO sendChatGpt(String prompt) {
+        ChatGptDTO chatGpt = new ChatGptDTO();
+        try {
+            OpenAiService service = new OpenAiService(chatGptProperty.getToken(), Duration.ofSeconds(chatGptProperty.getRequestTimeout()));
+            CompletionRequest completionRequest = CompletionRequest.builder()
+                    .prompt(prompt)
+                    .model(chatGptProperty.getModel())
+                    .temperature(chatGptProperty.getTemperature())
+                    .maxTokens(chatGptProperty.getMaxTokens())
+                    .build();
+            // 响应结果处理
+            List<CompletionChoice> completionChoices = service.createCompletion(completionRequest).getChoices();
+            if (CollectionUtils.isEmpty(completionChoices)) {
+                log.error("ChatGpt Answer:{}", JSON.toJSONString(completionChoices));
+                chatGpt.setSuccessed(false);
+            } else {
+                String answer = completionChoices.get(completionChoices.size() - 1).getText().replace(chatGptProperty.getAnswer().concat(Constant.MAOHAO), Constant.EMPTY);
+                chatGpt.setAnswer(answer);
+            }
+        } catch (Exception e) {
+            log.error(String.format("ChatGpt Error: %s", e.getMessage()), e);
+            chatGpt.setSuccessed(false);
+        }
+        return chatGpt;
+    }
+
+    /**
+     * 获取用户可用权益
+     *
+     * @param userId
+     */
+    private AvailableUserRight getAvailableUserRight(Long userId) {
+        // 用户权益
+        UserRightDTO userRight = userRightService.findByUserId(userId);
+        Optional.ofNullable(userRight).orElseThrow(() -> new ServiceException("用户异常，请联系管理员～"));
+        if(userRight.getStartAvailableTime() != null && userRight.getEndAvailableTime() != null) {
+            if(userRight.getEndAvailableTime().after(new Date())) {
+                return AvailableUserRight.PERIOD;
+            } else {
+                if(userRight.getAvailableTimes() > Constant.ZERO) {
+                    return AvailableUserRight.TIMES;
+                }
+            }
+        } else {
+            if(userRight.getAvailableTimes() > Constant.ZERO) {
+                return AvailableUserRight.TIMES;
+            }
+        }
+        throw new AvailableException("您没有使用次数～");
+     }
+
 
 
 }

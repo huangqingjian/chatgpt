@@ -33,7 +33,7 @@
                             <h6></h6>
                         </div>
                     </div>
-                    <a class="dropdown-item" href="/user/dashboard.html">充值中心</a>
+                    <a class="dropdown-item" href="/vip.html">充值中心</a>
                     <a class="dropdown-item" href="/user/profile.html">个人设置</a>
                     <a class="dropdown-item logout" href="javascript:void(0);">登出</a>
                 </div>

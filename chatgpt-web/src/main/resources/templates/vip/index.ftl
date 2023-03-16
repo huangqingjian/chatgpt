@@ -20,30 +20,19 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item border-0">
                                 <div class="row">
-                                    <div class="col-12 col-md-4 col-lg-4 d-flex">
-                                        <div class="card vip-card flex-fill">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center"><span class="font-orange font-big-1-5">¥ 198</span><span class="small ml-1">/ 年会员</span></h5>
-                                                <p class="card-text font-weight-light text-center">有效期一年 次数不限</p>
+                                    <#if vips?? && vips?size gt 0>
+                                    <#list vips as vip>
+                                        <div class="col-12 col-md-4 col-lg-4 d-flex">
+                                            <div class="card vip-card flex-fill">
+                                                <div class="card-body">
+                                                    <input type="hidden" name="vipId" value="${vip.id!''}">
+                                                    <h5 class="card-title text-center"><span class="price font-orange font-big-1-5" price="${vip.price!''}">¥ ${vip.price!''}</span><span class="small ml-1">/ ${vip.name!''}</span></h5>
+                                                    <p class="card-text font-weight-light text-center">${vip.desc!''}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 col-md-4 col-lg-4 d-flex">
-                                        <div class="card vip-card flex-fill">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center"><span class="font-orange font-big-1-5">¥ 68</span><span class="small ml-1">/ 月会员</span></h5>
-                                                <p class="card-text font-weight-light text-center">有效期1个月 次数1000次</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-4 col-lg-4 d-flex">
-                                        <div class="card vip-card flex-fill">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-center"><span class="font-orange font-big-1-5">¥ 38</span><span class="small ml-1">/ 周会员</span></h5>
-                                                <p class="card-text font-weight-light text-center">有效期7天 次数为100次</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </#list>
+                                    </#if>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -59,22 +48,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-8 col-lg-8 d-flex">
+                                    <div class="col-12 col-md-4 col-lg-4 d-flex">
                                         <div class="card flex-fill border-0">
                                             <div class="card-body">
                                                 <ul class="list-group list-group-flush">
                                                     <li class="list-group-item pt-0 border-0">
                                                         <span class="font-weight-bold font-big-1-5">应付金额：</span>
-                                                        <span class="font-orange font-big-1-3">¥ 38</span>
+                                                        <span class="font-orange font-big-1-3">¥ <span class="pay-amount"></span></span>
                                                     </li>
                                                     <li class="list-group-item">
                                                         <div class="row">
-                                                            <div class="col-12 col-md-6 col-lg-6">
-                                                                <img class="w-100" src="/static/img/qr.jpg">
-                                                                <div class="font-weight-light mt-2 text-center">
-                                                                    <img width="22" src="/static/img/zfb.png"/>
-                                                                    支付宝扫码支付
-                                                                </div>
+                                                            <div class="col-12 d-flex">
+                                                                <button type="button" class="btn btn-primary submit-btn pay-btn col-12">支付宝支付</button>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -84,7 +69,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="list-group-item"></li>
                         </ul>
                     </div>
                 </div>

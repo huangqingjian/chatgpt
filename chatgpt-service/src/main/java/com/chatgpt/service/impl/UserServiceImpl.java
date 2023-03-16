@@ -7,6 +7,7 @@ import com.chatgpt.dto.PageDTO;
 import com.chatgpt.dto.PasswordDTO;
 import com.chatgpt.dto.UserDTO;
 import com.chatgpt.dto.UserQueryDTO;
+import com.chatgpt.listener.event.UserAddEvent;
 import com.chatgpt.mapper.UserMapper;
 import com.chatgpt.service.UserService;
 import com.chatgpt.util.BeanUtils;
@@ -16,6 +17,8 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +38,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * 查询
@@ -115,6 +120,8 @@ public class UserServiceImpl implements UserService {
         log.info("the {}.save parameter: [{}]", this.getClass().getSimpleName(), JSON.toJSONString(dto));
         User domain = BeanUtils.map(dto, User.class);
         userMapper.insertUser(domain);
+        // 发布事件
+        applicationEventPublisher.publishEvent(new UserAddEvent(this, domain.getId()));
         return domain.getId();
     }
 

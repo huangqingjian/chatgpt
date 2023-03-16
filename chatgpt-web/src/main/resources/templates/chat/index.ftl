@@ -39,15 +39,6 @@
                                     <i class="material-icons">chevron_left</i>
                                 </a>
                                 <div class="media">
-                                    <div class="media-img-wrap">
-                                        <div class="avatar avatar-online">
-                                            <img src="/static/img/robot.jpeg" alt="头像" class="avatar-img rounded-circle">
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        <div class="user-name">ChatGpt</div>
-                                        <div class="user-status">在线</div>
-                                    </div>
                                 </div>
                                 <div class="chat-options dropdown">
                                     <a href="javascript:void(0)" role="button" data-toggle="dropdown">
@@ -129,6 +120,27 @@
 
     </div>
     <#include "/common/footer.ftl"/>
+    <!-- 充值VIP Modal -->
+    <div class="modal custom-modal fade none-border" id="vip">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title text-center w-100">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center font-big-1-3 font-orange">
+                        您没有使用次数，请开通VIP获得更多体验
+                    </div>
+                </div>
+                <div class="modal-footer border-0 text-center">
+                    <div class="submit-section">
+                        <button class="btn btn-outline-secondary forward-btn" data-dismiss="modal">残忍拒绝</button>
+                        <button class="btn btn-primary forward-btn" onclick="javascript:location.href='/vip.html'">去开通</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

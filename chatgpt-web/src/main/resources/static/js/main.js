@@ -130,6 +130,30 @@
 	})();
 	var loginTitle = "登录ChatGpt";
 	var loginTipTitle = "请先登录ChatGpt后访问～";
+	// 支付
+	if($(".pay-btn").length > 0) {
+		$(".pay-btn").click(function(){
+			var data = {};
+			data.vipId = $('.vip-card.selected').find('input[name=vipId]').val();
+			$.ajax({
+				url:  "/vip/buy",
+				dataType: 'json',
+				data: JSON.stringify(data),
+				type: 'post',
+				contentType: 'application/json',
+				success: function(result) {
+					if (result.code == 0) {
+						window.location.href = "/vip/success.html";
+					} else if(result.code == 401) {
+						$("#login .login-header h3").text(loginTipTitle);
+						$("#login").modal("toggle");
+					} else {
+						console.log(result.message);
+					}
+				}
+			});
+		});
+	}
 	// 查询会话列表
 	if(chatAppTarget.length > 0 ){
 		$.ajax({
@@ -153,7 +177,7 @@
 							var datetime = "";
 							if(lastest) {
 								question = lastest.question;
-								datetime = getDisplayDateTime(lastest.chatTime);
+								datetime = getDisplayDateTime(lastest.questionTime);
 							}
 							chat +=
 								'<div class="media-body">' +
@@ -282,7 +306,7 @@
 						if(result.data && result.data.length > 0) {
 							var lastChatTime = "";
 							for(var i = 0; i < result.data.length; i++) {
-								var chatTime = getDate(result.data[i].chatTime);
+								var chatTime = getDate(result.data[i].questionTime);
 								if(chatTime != lastChatTime) {
 									var displayDate = getDisplayDate(chatTime);
 									chatContent += '<li class="chat-date">'+displayDate+'</li>';
@@ -297,7 +321,7 @@
 													'<ul class="chat-msg-info">' +
 														'<li>' +
 															'<div class="chat-time">' +
-																'<span>'+getTime(result.data[i].chatTime)+'</span>' +
+																'<span>'+getTime(result.data[i].questionTime)+'</span>' +
 															'</div>' +
 														'</li>' +
 													'</ul>' +
@@ -333,8 +357,20 @@
 		});
 	}
 	$(".msg-send-btn").click(function(){
-		send_msg($("input[name=msg]").val());
+		_chat();
 	});
+	var _chat = function(){
+		var msg = $("input[name=msg]").val();
+		if(msg) {
+			if (!$('.chat-cont-right .chat-card-group').hasClass('hide')) {
+				if (create_chat()) {
+					send_msg(msg);
+				}
+			} else {
+				send_msg(msg);
+			}
+		}
+	};
 	var send_msg = function(msg){
 		if(msg) {
 			var chatDate = $('#chat-date').val();
@@ -415,6 +451,10 @@
 					} else if(result.code == 401) {
 						$("#login .login-header h3").text(loginTipTitle);
 						$("#login").modal("toggle");
+					} else if(result.code == 403) {
+						$("#" + msgId).html('<div><p class="msg">您没有使用次数，去<a class="font-weight-bold font-orange" href="/vip.html">充值</a></p></div>');
+						chatScroll.scrollTop(chatScroll.prop('scrollHeight'));
+						$("#vip").modal('toggle');
 					} else {
 						console.log(result.message);
 					}
@@ -426,7 +466,9 @@
 		$('.vip-card').click(function(){
 			$('.vip-card').removeClass('selected');
 			$(this).addClass('selected');
+			$('.pay-amount').text($(this).find('.price').attr('price'));
 		});
+		$('.vip-card').eq(0).trigger('click');
 	}
 	if($('.header-login').length > 0) {
 		$('.header-login').click(function(){
@@ -550,6 +592,29 @@
 			})
 		});
 	};
+	if($('.widget-profile').length > 0) {
+		$.ajax({
+			url:  "/user/get",
+			dataType: 'json',
+			type: 'get',
+			contentType: 'application/json',
+			success: function(result) {
+				if (result.code == 0 && result.data) {
+					if(result.data.face) {
+						$('.widget-profile .profile-img img').attr('src', result.data.face);
+					}
+					var username = result.data.mobile;
+					if(result.data.name) {
+						username = result.data.name;
+					}
+					$('.widget-profile .profile-det-info h3').text(username);
+					$('.widget-profile .profile-det-info h5').text(result.data.desc);
+				} else {
+					console.log(result.message);
+				}
+			}
+		});
+	}
 	var getCurrentUser = function(){
 		$.ajax({
 			url:  "/user/getCurrent",
@@ -579,7 +644,7 @@
 	})();
 	$(document).keydown(function(event){
 		if(event.keyCode == 13){
-			send_msg($("input[name=msg]").val());
+			_chat();
 			return false;
 		}
 	});

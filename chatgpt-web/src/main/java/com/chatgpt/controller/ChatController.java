@@ -116,7 +116,7 @@ public class ChatController extends BaseController{
     @ApiOperation(value = "问答")
     @PostMapping(value = "/chat/ask")
     @ResponseBody
-    public ResponseDTO<AnswerDTO> ask(@Valid @RequestBody QuestionDTO question) {
+    public ResponseDTO<AnswerDTO> ask(@Valid @RequestBody QuestionDTO question) throws Exception {
         AnswerDTO answer = chatService.chat(question);
         return ResponseDTO.success(answer);
     }

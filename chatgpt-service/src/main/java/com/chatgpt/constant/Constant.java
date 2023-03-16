@@ -63,6 +63,10 @@ public class Constant {
      */
     public static final int TWO = 2;
     /**
+     * 7
+     */
+    public static final int SEVEN = 7;
+    /**
      * 8
      */
     public static final int EIGHT = 8;
@@ -91,6 +95,9 @@ public class Constant {
     public static final String CONTENT_TYPE_JSON = "application/json;charset=UTF-8";
 
     public static final long SESSION_EXPIRATION = 86400L;
+
+    public static final String VIP_RIGHT = "会员权益截止日期%s";
+    public static final String NORMAL_RIGHT = "普通用户";
 
     /**
      * admin prefix
