@@ -10,8 +10,8 @@
     <#include "/common/header.ftl"/>
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-12">
+            <div class="row m-0">
+                <div class="col12 col-xl-12 p-0">
                     <div class="chat-window <#if requestURL!='/chat.html'>chat-home</#if>">
                         <div class="chat-cont-left">
                             <div class="chat-header">

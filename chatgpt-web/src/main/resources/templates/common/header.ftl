@@ -31,9 +31,6 @@
                 <li>
                     <a href="/vip.html">充值中心</a>
                 </li>
-                <li>
-                    <a href="/index.html">隐私协议</a>
-                </li>
             </ul>
         </div>
         <ul class="nav header-navbar-rht">

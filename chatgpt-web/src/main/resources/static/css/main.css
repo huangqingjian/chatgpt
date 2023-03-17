@@ -3338,7 +3338,7 @@ html.menu-opened body {
 		right: -100%;
 		top: 0;
 		opacity: 0;
-		visibility: hidden;
+		display: none;
 	}
 	.chat-cont-right .chat-header {
 		justify-content: start;
@@ -3357,7 +3357,7 @@ html.menu-opened body {
 	.chat-window.chat-slide .chat-cont-right {
 		right: 0;
 		opacity: 1;
-		visibility: visible;
+		display: block;
 	}
 	.day-slot li.left-arrow {
 		left: -10px;

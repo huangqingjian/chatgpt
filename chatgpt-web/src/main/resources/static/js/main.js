@@ -294,17 +294,27 @@
 				}
 			});
 		});
-		$("#chat-search").keyup(function(){
-			var q = $(this).val();
-			if(q) {
-				$('.chat-cont-left .chat-scroll .media').each(function () {
-					if ($(this).find(".user-last-chat").text().indexOf(q) == -1) {
-						$(this).addClass("hide");
-					}
-				});
+		var filterChat = function(q){
+			$('.chat-cont-left .chat-scroll .media').each(function () {
+				if ($(this).find(".user-last-chat").text().indexOf(q) == -1) {
+					$(this).addClass("hide");
+				}
+			});
+		};
+		$("#chat-search").on('input propertychange', function () {
+			if($(this).val()) {
+				if($(this).prop('chinese')) {
+					return;
+				}
+				filterChat($(this).val());
 			} else {
 				$('.chat-cont-left .chat-scroll .media').removeClass("hide");
 			}
+		}).on('compositionstart', function() {
+			$(this).prop('chinese', true);
+		}).on('compositionend', function() {
+			filterChat($(this).val());
+			$(this).prop('chinese', false);
 		});
 		$(document).on("click",".chat-cont-left .chat-scroll .media",function () {
 			$(this).addClass("active");
@@ -356,7 +366,7 @@
 											'<div class="msg-box">' +
 												'<div>' +
 													'<p class="msg">' + result.data[i].answer + '</p>' +
-												'</div>'
+												'</div>' +
 											'</div>' +
 										'</div>' +
 									'</li>';
@@ -552,7 +562,7 @@
 			});
 		});
 	};
-	// 保存profile
+	// 保存密码
 	if($('.change-password').length > 0) {
 		$(".change-password button").click(function(){
 			$('form .alert').remove();

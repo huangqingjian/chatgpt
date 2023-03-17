@@ -219,8 +219,8 @@ public class ChatServiceImpl implements ChatService {
             sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
         }
         // 请求chatgpt
-        ChatGptDTO response = new ChatGptDTO(); // sendChatGpt(sb.toString());
-        response.setAnswer("OK, my name is Limingqiang. I like singing, playing basketballand so on.");
+        ChatGptDTO response = sendChatGpt(sb.toString());
+//        response.setAnswer("OK, my name is Limingqiang. I like singing, playing basketballand so on.");
         if(response.getSuccessed()) {
             chatEvent.answer(response.getAnswer()).answerTime(new Date());
         }
