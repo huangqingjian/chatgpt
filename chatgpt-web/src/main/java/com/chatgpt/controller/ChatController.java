@@ -1,6 +1,5 @@
 package com.chatgpt.controller;
 
-import com.chatgpt.domain.ChatRecord;
 import com.chatgpt.dto.*;
 import com.chatgpt.service.ChatRecordService;
 import com.chatgpt.service.ChatService;
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,12 +36,11 @@ public class ChatController extends BaseController{
     /**
      * 主页
      *
-     * @param model
      * @return
      */
     @ApiOperation(value = "主页")
     @RequestMapping(value = { "", "/chat.html"})
-    public String index(Model model) {
+    public String index() {
         return INDEX;
     }
 

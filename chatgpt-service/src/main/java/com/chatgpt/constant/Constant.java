@@ -74,6 +74,8 @@ public class Constant {
     public static final String ADMIN_PREFIX = "admin:";
     public static final String WEB_PREFIX = "web:";
 
+    public static final String VIP = "vip";
+
     /**
      * admin session
      */

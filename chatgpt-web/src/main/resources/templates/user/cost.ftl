@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>我的资料</title>
+    <title>消费记录</title>
     <#include "/common/head.ftl"/>
 </head>
 <body>
@@ -11,10 +11,9 @@
         <div class="container-fluid">
             <div class="row">
                 <#include "/user/side-bar.ftl"/>
-                <div class="col-md-7 col-lg-8 col-xl-9 card-wapper">
+                <div class="col-md-7 col-lg-8 col-xl-9">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4 class="mb-4">充值记录</h4>
                             <div class="cost-tab">
                                 <div class="tab-content">
                                     <div class="tab-pane show active">
@@ -23,14 +22,14 @@
                                                 <div class="table-responsive">
                                                     <table class="table table-hover table-center mb-0">
                                                         <thead>
-                                                        <tr>
-                                                            <th>名称</th>
-                                                            <th>充值单号</th>
-                                                            <th>充值时间</th>
-                                                            <th class="text-center">金额</th>
-                                                            <th>支付时间</th>
-                                                            <th>支付状态</th>
-                                                        </tr>
+                                                            <tr>
+                                                                <th>名称</th>
+                                                                <th>充值单号</th>
+                                                                <th>充值时间</th>
+                                                                <th class="text-center">金额</th>
+                                                                <th>支付时间</th>
+                                                                <th>支付状态</th>
+                                                            </tr>
                                                         </thead>
                                                         <tbody id="costs">
                                                         </tbody>

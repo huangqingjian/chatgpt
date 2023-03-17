@@ -17,17 +17,34 @@
 			resizeInnerDiv();
 		}
 	});
+	$('body').append('<div class="sidebar-overlay"></div>');
+	$(document).on('click', '#mobile_btn', function() {
+		$('main-wrapper').toggleClass('slide-nav');
+		$('.sidebar-overlay').toggleClass('opened');
+		$('html').addClass('menu-opened');
+		return false;
+	});
+
+	$(document).on('click', '.sidebar-overlay', function() {
+		$('html').removeClass('menu-opened');
+		$(this).removeClass('opened');
+		$('main-wrapper').removeClass('slide-nav');
+	});
+
+	$(document).on('click', '#menu_close', function() {
+		$('html').removeClass('menu-opened');
+		$('.sidebar-overlay').removeClass('opened');
+		$('main-wrapper').removeClass('slide-nav');
+	});
 	// Chat
 	var chatAppTarget = $('.chat-window');
-	var mobileTarget = $('#mobile_btn');
 	(function() {
 		if ($(window).width() > 991) {
 			chatAppTarget.removeClass('chat-slide');
 		} else {
-			chatAppTarget.addClass('chat-slide');
-			mobileTarget.click(function(){
-				chatAppTarget.removeClass('chat-slide');
-			});
+			if(chatAppTarget.hasClass('chat-home')) {
+				chatAppTarget.addClass('chat-slide');
+			}
 		}
 		$(document).on("click",".chat-window .chat-list a.media",function () {
 			if ($(window).width() <= 991) {
@@ -615,6 +632,53 @@
 			}
 		});
 	}
+
+	if($(".load-more-cost").length > 0) {
+		var page = 1;
+		$(".load-more-cost a").click(function () {
+			loadCost();
+		});
+		var loadCost = function(){
+			$(".load-more-cost a").text('正在加载中...');
+			$.ajax({
+				url: "/cost/list?page="+page,
+				dataType: 'json',
+				type: 'post',
+				success: function(result) {
+					if (result.code == 0) {
+						if(result.data && result.data.list && result.data.list.length > 0) {
+							for(var i = 0; i < result.data.list.length; i++) {
+								var cost =
+								'<tr>' +
+									'<td>' + result.data.list[i].vipName + '</td>' +
+									'<td>' + result.data.list[i].costNo + '</td>' +
+									'<td>' + result.data.list[i].orderTime + '</td>' +
+									'<td class="text-center">' + result.data.list[i].amount + '</td>' +
+									'<td>' + result.data.list[i].payTime + '</td>' +
+									'<td>' +
+										'<span class="badge badge-pill '+(result.data.list[i].payStatus==1?"bg-warning-light":(result.data.list[i].payStatus==2?"bg-success-light":"bg-danger-light"))+'">'+(result.data.list[i].payStatus==1?"待支付":(result.data.list[i].payStatus==2?"已支付":"已取消"))+'</span>'+
+									'</td>' +
+								'</tr>';
+								$("#costs").append(cost);
+							}
+							$(".load-more-cost a").text("点击加载");
+						} else {
+							if(page == 1) {
+								$(".load-more-cost").html("抱歉，没找到您要的资讯信息～");
+							} else {
+								$(".load-more-cost").html("已经到底啦～");
+							}
+						}
+						page = page + 1;
+					} else {
+						console.log(result.message);
+					}
+				}
+			})
+		};
+		// 加载花费
+		loadCost();
+	};
 	var getCurrentUser = function(){
 		$.ajax({
 			url:  "/user/getCurrent",

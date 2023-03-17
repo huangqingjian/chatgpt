@@ -12,7 +12,7 @@ public class PageQueryDTO {
      * 当前页
      */
     @ApiModelProperty("当前页")
-    private Integer page = 0;
+    private Integer page = 1;
 
     /**
      * 每页记录数

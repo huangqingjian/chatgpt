@@ -16,6 +16,11 @@ public class Cost extends BaseDomain {
     private Long id;
 
     /**
+     * 充值单号
+     */
+    private String costNo;
+
+    /**
      * 用户Id
      */
     private Long userId;
@@ -23,7 +28,7 @@ public class Cost extends BaseDomain {
     /**
      * 会员Id
      */
-    private Long productId;
+    private Long vipId;
 
     /**
      * 金额
@@ -53,6 +58,14 @@ public class Cost extends BaseDomain {
         this.id = id;
     }
 
+    public String getCostNo() {
+        return costNo;
+    }
+
+    public void setCostNo(String costNo) {
+        this.costNo = costNo;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -61,12 +74,12 @@ public class Cost extends BaseDomain {
         this.userId = userId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getVipId() {
+        return vipId;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setVipId(Long vipId) {
+        this.vipId = vipId;
     }
 
     public BigDecimal getAmount() {

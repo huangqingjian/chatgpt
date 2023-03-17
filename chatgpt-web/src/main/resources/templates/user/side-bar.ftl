@@ -18,26 +18,37 @@
                 <ul>
                     <li>
                         <a href="/vip.html">
-                            <i class="fas fa-columns"></i>
+                            <i class="fas fa-align-center"></i>
                             <span>充值中心</span>
+                            <small class="forward"><i class="fas fa-angle-right"></i></small>
                         </a>
                     </li>
-                    <li>
-                        <a href="profile.html">
+                    <li <#if requestURL=='/user/cost.html'>class="active"</#if>>
+                        <a href="/user/cost.html">
+                            <i class="fas fa-columns"></i>
+                            <span>我的充值</span>
+                            <small class="forward"><i class="fas fa-angle-right"></i></small>
+                        </a>
+                    </li>
+                    <li <#if requestURL=='/user/profile.html'>class="active"</#if>>
+                        <a href="/user/profile.html">
                             <i class="fas fa-user-cog"></i>
                             <span>我的资料</span>
+                            <small class="forward"><i class="fas fa-angle-right"></i></small>
                         </a>
                     </li>
-                    <li>
-                        <a href="change-password.html">
+                    <li <#if requestURL=='/user/change-password.html'>class="active"</#if>>
+                        <a href="/user/change-password.html">
                             <i class="fas fa-lock"></i>
                             <span>修改密码</span>
+                            <small class="forward"><i class="fas fa-angle-right"></i></small>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0);" class="logout">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>退出登录</span>
+                            <small class="forward"><i class="fas fa-angle-right"></i></small>
                         </a>
                     </li>
                 </ul>

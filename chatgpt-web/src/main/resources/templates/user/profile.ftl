@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row">
                 <#include "/user/side-bar.ftl"/>
-                <div class="col-md-7 col-lg-8 col-xl-9 card-wapper">
+                <div class="col-md-7 col-lg-8 col-xl-9">
                     <div class="card">
                         <div class="card-body">
                             <form action="">

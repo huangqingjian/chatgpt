@@ -12,6 +12,30 @@
                 <img src="/static/img/logo.png" class="img-fluid" alt="Logo">
             </a>
         </div>
+        <div class="main-menu-wrapper">
+            <div class="menu-header">
+                <a href="index.html" class="menu-logo">
+                    <img src="/static/img/logo.png" class="img-fluid" alt="Logo">
+                </a>
+                <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
+            <ul class="main-nav" id="menus">
+                <li>
+                    <a href="/">首页</a>
+                </li>
+                <li>
+                    <a href="/chat.html">聊天窗口</a>
+                </li>
+                <li>
+                    <a href="/vip.html">充值中心</a>
+                </li>
+                <li>
+                    <a href="/index.html">隐私协议</a>
+                </li>
+            </ul>
+        </div>
         <ul class="nav header-navbar-rht">
             <#-- 未登录 -->
             <li class="nav-item no-log-item">
@@ -34,7 +58,7 @@
                         </div>
                     </div>
                     <a class="dropdown-item" href="/vip.html">充值中心</a>
-                    <a class="dropdown-item" href="/user/profile.html">个人设置</a>
+                    <a class="dropdown-item" href="/user/dashboard.html">我的面板</a>
                     <a class="dropdown-item logout" href="javascript:void(0);">登出</a>
                 </div>
             </li>

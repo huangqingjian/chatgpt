@@ -12,7 +12,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="chat-window">
+                    <div class="chat-window <#if requestURL!='/chat.html'>chat-home</#if>">
                         <div class="chat-cont-left">
                             <div class="chat-header">
                                 <span>聊天</span>

@@ -100,8 +100,9 @@ CREATE TABLE IF NOT EXISTS `tbl_user_right_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 auto_increment = 10000 COMMENT='用户权益明细';
 CREATE TABLE IF NOT EXISTS `tbl_cost` (
  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+ `cost_no` varchar(32) NOT NULL DEFAULT '' COMMENT '充值单号',
  `user_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '用户Id',
- `product_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '产品Id',
+ `vip_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '会员Id',
  `amount` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '金额',
  `order_time` datetime NULL COMMENT '下单时间',
  `pay_time` datetime NULL COMMENT '支付时间',

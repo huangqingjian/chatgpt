@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.security.sasl.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.Objects;
@@ -47,6 +48,7 @@ public class UserController extends BaseController{
     private static final String CHANGE_PASSWORD = "/user/change-password";
     private static final String DASHBOARD = "/user/dashboard";
     private static final String PROFILE = "/user/profile";
+    private static final String COST = "/user/cost";
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -104,6 +106,17 @@ public class UserController extends BaseController{
     @GetMapping(value = "/profile.html")
     public String profile() {
         return PROFILE;
+    }
+
+    /**
+     * 消费页
+     *
+     * @return
+     */
+    @ApiOperation(value = "消费页")
+    @GetMapping(value = "/cost.html")
+    public String cost() {
+        return COST;
     }
 
     /**
@@ -220,6 +233,9 @@ public class UserController extends BaseController{
         return ResponseDTO.success(Boolean.TRUE);
     }
 
+    @Autowired
+    private HttpServletRequest request;
+
     /**
      * 添加RequestURI
      *
@@ -227,6 +243,7 @@ public class UserController extends BaseController{
      */
     @ModelAttribute
     private void before(Model model) {
+        model.addAttribute("requestURL", request.getRequestURI());
         model.addAttribute("currentUser", getCurrentUser());
     }
 }

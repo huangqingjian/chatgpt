@@ -1722,7 +1722,7 @@ button.bg-danger:hover {
     width: 31px;
 }
 .bar-icon span {
-    background-color: #0de0fe;
+    background-color: #2f3599;
     display: block;
     float: left;
     height: 3px;
@@ -1749,7 +1749,7 @@ html.menu-opened body {
 -----------------------*/
 
 .footer {
-    background-color: #15558d;
+    background-color: #2f3599;
 }
 .footer .footer-top {
 	padding: 40px 0;
@@ -2999,6 +2999,40 @@ html.menu-opened body {
 	padding: 12px 30px;
 }
 
+.cost-tab {
+	margin-bottom: 30px;
+}
+.cost-tab .nav-tabs {
+	background-color: #fff;
+	padding: 1.5rem;
+	border: 1px solid #f0f0f0;
+	border-radius: .25rem 0.25rem 0 0 !important;
+	border-bottom: 0;
+}
+.cost-tab .tab-content {
+	padding-top: 0;
+}
+.cost-tab .card {
+	border-radius: 0;
+}
+
+.forward {
+	border-radius: 2px;
+	color: #757575;
+	font-size: 10px;
+	font-style: normal;
+	padding: 0 5px;
+	position: absolute;
+	right: 20px;
+	text-align: center;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+#menus {
+	display: none;
+}
+
 /*-----------------
 	38. Responsive
 -----------------------*/
@@ -3259,7 +3293,7 @@ html.menu-opened body {
 		z-index: 1060;
 		transform: translateX(-260px);
 		transition: all 0.4s;
-		background-color: #15558d;
+		background-color: #2f3599;
 	}
 	.menu-header {
 		display: -webkit-box;
@@ -3376,9 +3410,6 @@ html.menu-opened body {
 	.about-content {
 		margin-bottom: 30px;
 	}
-	.card-wapper {
-		display: none;
-	}
 }
 @media only screen and (max-width: 849.98px) {
 	.row.row-grid > div {
@@ -3426,8 +3457,11 @@ html.menu-opened body {
 		height: calc(100vh - 120px);
 		margin-bottom: 20px;
 	}
-	.appointment-tab {
+	.cost-tab {
 		margin-bottom: 20px;
+	}
+	.cost-tab .nav-tabs {
+		padding: 1.5rem;
 	}
 	.features-slider .slick-dots, .features-img img {
 		text-align: center;
@@ -3848,6 +3882,14 @@ html.menu-opened body {
 	.submit-btn-bottom {
 		margin-bottom: 0.9375rem;
 	}
+	.card-wapper {
+		display: none;
+	}
+	#menus {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+	}
 }
 
 @media only screen and (max-width:479px) {
@@ -3913,5 +3955,13 @@ html.menu-opened body {
 	}
 	.fc-header-toolbar .fc-right {
 		margin-bottom: 10px;
+	}
+	.card-wapper {
+		display: none;
+	}
+	#menus {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
 	}
 }

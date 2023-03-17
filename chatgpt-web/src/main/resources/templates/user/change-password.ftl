@@ -3,7 +3,6 @@
 <head>
     <title>修改密码</title>
     <#include "/common/head.ftl"/>
-    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
 <div class="main-wrapper">
@@ -12,7 +11,7 @@
         <div class="container-fluid">
             <div class="row">
                 <#include "/user/side-bar.ftl"/>
-                <div class="col-md-7 col-lg-8 col-xl-9 card-wapper">
+                <div class="col-md-7 col-lg-8 col-xl-9">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">

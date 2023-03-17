@@ -153,7 +153,7 @@ public class VipServiceImpl implements VipService {
         // 生成消费记录 FIXME 假设支付成功
         CostDTO cost = new CostDTO();
         cost.setUserId(userId);
-        cost.setProductId(vipBuy.getVipId());
+        cost.setVipId(vipBuy.getVipId());
         cost.setAmount(vip.getPrice());
         cost.setOrderTime(new Date());
         cost.setPayTime(new Date());

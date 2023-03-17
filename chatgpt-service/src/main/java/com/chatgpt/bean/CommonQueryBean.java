@@ -13,6 +13,11 @@ public class CommonQueryBean extends PageQueryBean {
      */
     private String q;
 
+    /**
+     * 用户Id
+     */
+    private Long userId;
+
     public String getQ() {
         return q;
     }
@@ -21,4 +26,11 @@ public class CommonQueryBean extends PageQueryBean {
         this.q = q;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 }

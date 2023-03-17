@@ -2,13 +2,17 @@ package com.chatgpt.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.chatgpt.bean.CommonQueryBean;
+import com.chatgpt.component.IdGenerate;
+import com.chatgpt.constant.Constant;
 import com.chatgpt.domain.Cost;
 import com.chatgpt.dto.CostDTO;
 import com.chatgpt.dto.CommonQueryDTO;
 import com.chatgpt.dto.PageDTO;
+import com.chatgpt.dto.VipDTO;
 import com.chatgpt.exception.ServiceException;
 import com.chatgpt.mapper.CostMapper;
 import com.chatgpt.service.CostService;
+import com.chatgpt.service.VipService;
 import com.chatgpt.util.BeanUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,9 +21,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
 * 消费服务
@@ -32,6 +39,10 @@ public class CostServiceImpl implements CostService {
     private static final Logger log = LoggerFactory.getLogger(CostServiceImpl.class);
     @Autowired
     private CostMapper costMapper;
+    @Autowired
+    private VipService vipService;
+    @Autowired
+    private IdGenerate idGenerate;
 
     /**
      * 查询
@@ -50,6 +61,16 @@ public class CostServiceImpl implements CostService {
         // 转换为PageDTO
         PageDTO<CostDTO> page = BeanUtils.map(pageInfo, PageDTO.class);
         page.setList(BeanUtils.mapList(pageInfo.getList(), CostDTO.class));
+        if(!CollectionUtils.isEmpty(page.getList())) {
+            List<VipDTO> vips = vipService.listAll();
+            Map<Long, VipDTO> vipMap = vips.stream().collect(Collectors.toMap(k -> k.getId(), v -> v, (k1, k2) -> k1));
+            for(CostDTO dto : page.getList()) {
+                VipDTO vip = vipMap.get(dto.getVipId());
+                if(vip != null) {
+                    dto.setVipName(vip.getName());
+                }
+            }
+        }
         return page;
     }
 
@@ -94,6 +115,7 @@ public class CostServiceImpl implements CostService {
     public Long save(CostDTO dto) {
         log.info("the {}.save parameter: [{}]", this.getClass().getSimpleName(), JSON.toJSONString(dto));
         Cost domain = BeanUtils.map(dto, Cost.class);
+        domain.setCostNo(Constant.VIP.concat(idGenerate.getId()));
         costMapper.insertCost(domain);
         return domain.getId();
     }

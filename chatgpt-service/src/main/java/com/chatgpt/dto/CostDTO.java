@@ -1,5 +1,6 @@
 package com.chatgpt.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,22 +22,28 @@ public class CostDTO extends BaseDTO {
     private Long id;
 
     /**
+     * 充值单号
+     */
+    @ApiModelProperty("充值单号")
+    private String costNo;
+
+    /**
      * 用户Id
      */
     @ApiModelProperty("用户Id")
     private Long userId;
 
     /**
-     * 用户
-     */
-    @ApiModelProperty("用户")
-    private UserDTO user;
-
-    /**
      * 会员Id
      */
     @ApiModelProperty("会员Id")
-    private Long productId;
+    private Long vipId;
+
+    /**
+     * 会员名
+     */
+    @ApiModelProperty("会员名")
+    private String vipName;
 
     /**
      * 金额
@@ -48,12 +55,14 @@ public class CostDTO extends BaseDTO {
      * 下单时间
      */
     @ApiModelProperty("下单时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderTime;
 
     /**
      * 支付时间
      */
     @ApiModelProperty("支付时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date payTime;
 
     /**
@@ -70,6 +79,14 @@ public class CostDTO extends BaseDTO {
         this.id = id;
     }
 
+    public String getCostNo() {
+        return costNo;
+    }
+
+    public void setCostNo(String costNo) {
+        this.costNo = costNo;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -78,12 +95,20 @@ public class CostDTO extends BaseDTO {
         this.userId = userId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getVipId() {
+        return vipId;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setVipId(Long vipId) {
+        this.vipId = vipId;
+    }
+
+    public String getVipName() {
+        return vipName;
+    }
+
+    public void setVipName(String vipName) {
+        this.vipName = vipName;
     }
 
     public BigDecimal getAmount() {

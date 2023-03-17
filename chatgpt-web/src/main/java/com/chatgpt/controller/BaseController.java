@@ -42,4 +42,14 @@ public class BaseController {
     public Long getCurrentUserId() {
         return SecurityUtils.getCurrentUserId();
     }
+
+    /**
+     * 添加RequestURI
+     *
+     * @param model
+     */
+    @ModelAttribute
+    private void before(Model model) {
+        model.addAttribute("requestURL", request.getRequestURI());
+    }
 }

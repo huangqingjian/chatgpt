@@ -3,8 +3,9 @@
 <mapper namespace="com.chatgpt.mapper.CostMapper" >
     <resultMap id="BaseResultMap" type="com.chatgpt.domain.Cost" >
         <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="cost_no" property="costNo" jdbcType="VARCHAR" />
         <result column="user_id" property="userId" jdbcType="BIGINT" />
-        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="vip_id" property="vipId" jdbcType="BIGINT" />
         <result column="amount" property="amount" jdbcType="DECIMAL" />
         <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
         <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
@@ -17,8 +18,9 @@
     </resultMap>
     <sql id="Base_Column_List" >
         `id`,
+        `cost_no`,
         `user_id`,
-        `product_id`,
+        `vip_id`,
         `amount`,
         `order_time`,
         `pay_time`,
@@ -52,11 +54,14 @@
     <insert id="insertCost" parameterType="com.chatgpt.domain.Cost" useGeneratedKeys="true" keyProperty="id">
         insert into tbl_cost
         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="costNo != null" >
+                `cost_no`,
+            </if>
             <if test="userId != null" >
                 `user_id`,
             </if>
-            <if test="productId != null" >
-                `product_id`,
+            <if test="vipId != null" >
+                `vip_id`,
             </if>
             <if test="amount != null" >
                 `amount`,
@@ -78,11 +83,14 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="costNo != null" >
+                #{costNo,jdbcType=VARCHAR},
+            </if>
             <if test="userId != null" >
                 #{userId,jdbcType=BIGINT},
             </if>
-            <if test="productId != null" >
-                #{productId,jdbcType=BIGINT},
+            <if test="vipId != null" >
+                #{vipId,jdbcType=BIGINT},
             </if>
             <if test="amount != null" >
                 #{amount,jdbcType=DECIMAL},
@@ -107,11 +115,14 @@
     <update id="updateCost" parameterType="com.chatgpt.domain.Cost" >
         update tbl_cost
         <set>
+            <if test="costNo != null" >
+                `cost_no` = #{costNo,jdbcType=VARCHAR},
+            </if>
             <if test="userId != null" >
                 `user_id` = #{userId,jdbcType=BIGINT},
             </if>
-            <if test="productId != null" >
-                `product_id` = #{productId,jdbcType=BIGINT},
+            <if test="vipId != null" >
+                `vip_id` = #{vipId,jdbcType=BIGINT},
             </if>
             <if test="amount != null" >
                 `amount` = #{amount,jdbcType=DECIMAL},

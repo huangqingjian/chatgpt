@@ -18,6 +18,12 @@ public class CommonQueryDTO extends PageQueryDTO {
     @ApiModelProperty("q")
     private String q;
 
+    /**
+     * 用户Id
+     */
+    @ApiModelProperty("用户Id")
+    private Long userId;
+
     public CommonQueryDTO () {
 
     }
@@ -30,4 +36,11 @@ public class CommonQueryDTO extends PageQueryDTO {
         this.q = q;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 }
