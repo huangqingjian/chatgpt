@@ -1,6 +1,11 @@
 package com.chatgpt.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.chatgpt.ai.ChatCompletionMessage;
+import com.chatgpt.ai.ChatGptService;
+import com.chatgpt.ai.request.ChatCompletionRequest;
+import com.chatgpt.ai.response.ChatCompletionChoice;
+import com.chatgpt.ai.response.ChatCompletionResult;
 import com.chatgpt.bean.CommonQueryBean;
 import com.chatgpt.constant.Constant;
 import com.chatgpt.context.UserContext;
@@ -16,11 +21,11 @@ import com.chatgpt.property.ChatGptProperty;
 import com.chatgpt.service.ChatRecordService;
 import com.chatgpt.service.ChatService;
 import com.chatgpt.service.UserRightService;
-import com.chatgpt.service.UserService;
 import com.chatgpt.util.BeanUtils;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -53,12 +58,11 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private ChatRecordService chatRecordService;
     @Autowired
-    private UserService userService;
-    @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
     @Autowired
     private UserRightService userRightService;
-
+    @Autowired
+    private ChatGptService chatGptService;
     @Autowired
     @Qualifier(value = "chatCache")
     private LoadingCache<Long, ChatDTO> chatCache;
@@ -199,28 +203,11 @@ public class ChatServiceImpl implements ChatService {
             .question(contents.get(contents.size() - 1).getContent())
             .questionTime(new Date())
             .availableUserRight(availableUserRight);
-        // 组装内容
-        StringBuffer sb = new StringBuffer();
-        if(Objects.equals(Boolean.TRUE, question.getCoherented())) {
-            for (ContentDTO content : contents) {
-                if (Objects.equals(ContentType.QUESTION.getValue(), content.getType())) {
-                    sb.append(chatGptProperty.getQuestioner().concat(Constant.MAOHAO));
-                } else if (Objects.equals(ContentType.ANSWER.getValue(), content.getType())) {
-                    sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
-                }
-                sb.append(content.getContent());
-                sb.append(Constant.TNN);
-            }
-            sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
-        } else {
-            sb.append(chatGptProperty.getQuestioner().concat(Constant.MAOHAO));
-            sb.append(contents.get(contents.size() - 1).getContent());
-            sb.append(Constant.TNN);
-            sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
-        }
-        // 请求chatgpt
-        ChatGptDTO response = sendChatGpt(sb.toString());
-//        response.setAnswer("OK, my name is Limingqiang. I like singing, playing basketballand so on.");
+        // 请求chatgpt4
+        ChatGptDTO response = sendChatGpt4(contents, question.getCoherented());
+        /**
+        response.setAnswer("OK, my name is Limingqiang. I like singing, playing basketballand so on.");
+         */
         if(response.getSuccessed()) {
             chatEvent.answer(response.getAnswer()).answerTime(new Date());
         }
@@ -233,32 +220,105 @@ public class ChatServiceImpl implements ChatService {
     }
 
     /**
-     * 发送给chatgpt
+     * 发送给chatgpt 3
      *
-     * @param prompt
+     * @param contents
+     * @param coherented
      * @return
      */
-    private ChatGptDTO sendChatGpt(String prompt) {
+    private ChatGptDTO sendChatGpt3(List<ContentDTO> contents, Boolean coherented) {
         ChatGptDTO chatGpt = new ChatGptDTO();
         try {
+            // 组装内容
+            StringBuffer sb = new StringBuffer();
+            if(Objects.equals(Boolean.TRUE, coherented)) {
+                for (ContentDTO content : contents) {
+                    if (Objects.equals(ContentType.QUESTION.getValue(), content.getType())) {
+                        sb.append(chatGptProperty.getQuestioner().concat(Constant.MAOHAO));
+                    } else if (Objects.equals(ContentType.ANSWER.getValue(), content.getType())) {
+                        sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
+                    }
+                    sb.append(content.getContent());
+                    sb.append(Constant.TNN);
+                }
+                sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
+            } else {
+                sb.append(chatGptProperty.getQuestioner().concat(Constant.MAOHAO));
+                sb.append(contents.get(contents.size() - 1).getContent());
+                sb.append(Constant.TNN);
+                sb.append(chatGptProperty.getAnswer().concat(Constant.MAOHAO));
+            }
+            // 请求openai
             OpenAiService service = new OpenAiService(chatGptProperty.getToken(), Duration.ofSeconds(chatGptProperty.getRequestTimeout()));
             CompletionRequest completionRequest = CompletionRequest.builder()
-                    .prompt(prompt)
-                    .model(chatGptProperty.getModel())
+                    .prompt(sb.toString())
+                    .model(chatGptProperty.getModel_3())
                     .temperature(chatGptProperty.getTemperature())
                     .maxTokens(chatGptProperty.getMaxTokens())
                     .build();
             // 响应结果处理
-            List<CompletionChoice> completionChoices = service.createCompletion(completionRequest).getChoices();
-            if (CollectionUtils.isEmpty(completionChoices)) {
-                log.error("ChatGpt Answer:{}", JSON.toJSONString(completionChoices));
+            List<CompletionChoice> choices = service.createCompletion(completionRequest).getChoices();
+            if (CollectionUtils.isEmpty(choices)) {
+                log.error("ChatGpt3 Answer:{}", JSON.toJSONString(choices));
                 chatGpt.setSuccessed(false);
             } else {
-                String answer = completionChoices.get(completionChoices.size() - 1).getText().replace(chatGptProperty.getAnswer().concat(Constant.MAOHAO), Constant.EMPTY);
+                String answer = choices.get(choices.size() - 1).getText().replace(chatGptProperty.getAnswer().concat(Constant.MAOHAO), Constant.EMPTY);
                 chatGpt.setAnswer(answer);
             }
         } catch (Exception e) {
-            log.error(String.format("ChatGpt Error: %s", e.getMessage()), e);
+            log.error(String.format("ChatGpt3 Error: %s", e.getMessage()), e);
+            chatGpt.setSuccessed(false);
+        }
+        return chatGpt;
+    }
+
+    /**
+     * 发送给chatgpt 4
+     *
+     * @param contents
+     * @param coherented
+     * @return
+     */
+    private ChatGptDTO sendChatGpt4(List<ContentDTO> contents, Boolean coherented) {
+        ChatGptDTO chatGpt = new ChatGptDTO();
+        try {
+            // 组装内容
+            List<ChatCompletionMessage> messages = Lists.newArrayList();
+            if(Objects.equals(Boolean.TRUE, coherented)) {
+                for (ContentDTO content : contents) {
+                    ChatCompletionMessage message = new ChatCompletionMessage();
+                    if (Objects.equals(ContentType.QUESTION.getValue(), content.getType())) {
+                        message.setRole(chatGptProperty.getQuestioner());
+                    } else if (Objects.equals(ContentType.ANSWER.getValue(), content.getType())) {
+                        message.setRole(chatGptProperty.getAnswer());
+                    }
+                    message.setContent(content.getContent());
+                    messages.add(message);
+                }
+            } else {
+                ChatCompletionMessage message = new ChatCompletionMessage();
+                message.setRole(chatGptProperty.getQuestioner());
+                message.setContent(contents.get(contents.size() - 1).getContent());
+                messages.add(message);
+            }
+            // 请求openai
+            ChatCompletionRequest completionRequest = new ChatCompletionRequest()
+                    .messages(messages)
+                    .model(chatGptProperty.getModel_4())
+                    .temperature(chatGptProperty.getTemperature())
+                    .max_tokens(chatGptProperty.getMaxTokens());
+            ChatCompletionResult result = chatGptService.createChatCompletion(chatGptProperty.getToken(), chatGptProperty.getRequestTimeout(), completionRequest);
+            // 响应结果处理
+            List<ChatCompletionChoice> choices = result.getChoices();
+            if (CollectionUtils.isEmpty(choices)) {
+                log.error("ChatGpt4 Answer:{}", JSON.toJSONString(choices));
+                chatGpt.setSuccessed(false);
+            } else {
+                String answer = choices.get(choices.size() - 1).getMessage().getContent();
+                chatGpt.setAnswer(answer);
+            }
+        } catch (Exception e) {
+            log.error(String.format("ChatGpt4 Error: %s", e.getMessage()), e);
             chatGpt.setSuccessed(false);
         }
         return chatGpt;

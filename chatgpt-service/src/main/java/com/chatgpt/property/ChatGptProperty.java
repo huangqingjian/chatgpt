@@ -18,9 +18,13 @@ public class ChatGptProperty {
      */
     private Integer requestTimeout;
     /**
-     * 模型
+     * 模型3
      */
-    private String model;
+    private String model_3;
+    /**
+     * 模型4
+     */
+    private String model_4;
     /**
      * 回答的准确性，介于0-2之间，越大回答与问题越不想干，可以认为思想越跳越，这里建议取0.9
      */
@@ -54,12 +58,20 @@ public class ChatGptProperty {
         this.requestTimeout = requestTimeout;
     }
 
-    public String getModel() {
-        return model;
+    public String getModel_3() {
+        return model_3;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setModel_3(String model_3) {
+        this.model_3 = model_3;
+    }
+
+    public String getModel_4() {
+        return model_4;
+    }
+
+    public void setModel_4(String model_4) {
+        this.model_4 = model_4;
     }
 
     public Double getTemperature() {
